@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador QR - Consejo Comunitario Tierra Bomba</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #0F4C81;      /* Azul marino principal */
+      --secondary: #FF6B35;    /* Naranja vibrante */
+      --accent: #00A896;       /* Verde azulado elegante */
+      --light: #F8F9FA;
+      --dark: #1A1A2E;
+      --gray: #6C757D;
+      --gradient-primary: linear-gradient(135deg, var(--primary) 0%, #1A6FC4 100%);
+      --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, #FF8E53 100%);
+      --gradient-accent: linear-gradient(135deg, var(--accent) 0%, #02C39A 100%);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.12);
+      --radius: 16px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: var(--gradient-primary);
+      color: white;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 4px 20px rgba(15, 76, 129, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+      opacity: 0.1;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-container {
+      width: 80px;
+      height: 80px;
+      background: white;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .logo {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gradient-accent);
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+      text-align: center;
+      line-height: 1.2;
+      padding: 5px;
+    }
+
+    .org-info h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.5px;
+    }
+
+    .org-info p {
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 1000px;
+      background: white;
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    .card-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .card-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .card-subtitle {
+      color: var(--gray);
+      font-size: 1.1rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-label i {
+      color: var(--accent);
+    }
+
+    .form-required::after {
+      content: " *";
+      color: var(--secondary);
+    }
+
+    .form-control {
+      padding: 1rem 1.2rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: var(--transition);
+      background: white;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 168, 150, 0.1);
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    .actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 1.8rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      gap: 0.7rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: var(--gradient-secondary);
+      color: white;
+      box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(255, 107, 53, 0.5);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(15, 76, 129, 0.3);
+    }
+
+    .btn-accent {
+      background: var(--gradient-accent);
+      color: white;
+      box-shadow: 0 4px 15px rgba(0, 168, 150, 0.4);
+    }
+
+    .btn-accent:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(0, 168, 150, 0.5);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn:disabled:hover::before {
+      left: -100%;
+    }
+
+    .qr-section {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .qr-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      align-items: flex-start;
+    }
+
+    #qrcode {
+      padding: 1.5rem;
+      background: white;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      box-shadow: var(--shadow);
+      display: inline-block;
+      transition: var(--transition);
+    }
+
+    #qrcode:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .qr-info {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .meta-info {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border-radius: 12px;
+      padding: 1.5rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95rem;
+      color: var(--dark);
+      border: 1px solid #e2e8f0;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .meta-info strong {
+      color: var(--primary);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--gray);
+      font-size: 0.9rem;
+      background: white;
+      border-top: 1px solid #e2e8f0;
+      margin-top: auto;
+    }
+
+    .alert {
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(255, 107, 53, 0.1);
+      border-left: 4px solid var(--secondary);
+      color: var(--dark);
+    }
+
+    .alert i {
+      color: var(--secondary);
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+      
+      .card {
+        padding: 1.5rem;
+      }
+      
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .qr-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .qr-info {
+        width: 100%;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .actions {
+        flex-direction: column;
+        width: 100%;
+      }
+    }
+
+    /* Animaciones */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    .form-group {
+      animation: fadeIn 0.6s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .form-group:nth-child(1) { animation-delay: 0.1s; }
+    .form-group:nth-child(2) { animation-delay: 0.2s; }
+    .form-group:nth-child(3) { animation-delay: 0.3s; }
+    .form-group:nth-child(4) { animation-delay: 0.4s; }
+    .form-group:nth-child(5) { animation-delay: 0.5s; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo-container">
+        <div class="logo">CONSEJO<br>COMUNITARIO<br>TIERRA BOMBA</div>
+      </div>
+      <div class="org-info">
+        <h1>Consejo Comunitario de Tierra Bomba</h1>
+        <p>Generador de códigos QR para documentos oficiales</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Generador de Código QR</h2>
+        <p class="card-subtitle">Rellena los campos del documento. Se generará un QR con la información cifrada y un número de radicado único.</p>
+      </div>
+
+      <div class="alert">
+        <i class="fas fa-info-circle"></i>
+        <div>Complete todos los campos obligatorios marcados con <span style="color: var(--secondary)">*</span> para generar el código QR</div>
+      </div>
+
+      <form id="docForm" autocomplete="off">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label form-required" for="docType">
+              <i class="fas fa-file-alt"></i>Tipo de documento
+            </label>
+            <input id="docType" class="form-control" type="text" placeholder="Ej: Aval, Aval Comunitario, Certificado..." list="docSuggestions" required />
+            <datalist id="docSuggestions">
+              <option value="Aval">
+              <option value="Aval Comunitario">
+              <option value="Certificado">
+              <option value="Certificado de Cooperación">
+              <option value="Aval de Proyecto">
+            </datalist>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label form-required" for="idType">
+              <i class="fas fa-id-card"></i>Tipo de identificación
+            </label>
+            <select id="idType" class="form-control" required>
+              <option value="">Seleccione...</option>
+              <option value="Cédula de Ciudadanía">Cédula de Ciudadanía</option>
+              <option value="Tarjeta de Identidad">Tarjeta de Identidad</option>
+              <option value="Cédula de Extranjería">Cédula de Extranjería</option>
+              <option value="NIT">NIT (Empresa)</option>
+              <option value="Pasaporte">Pasaporte</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label form-required" for="recipientName">
+              <i class="fas fa-user"></i>Nombre del destinatario
+            </label>
+            <input id="recipientName" class="form-control" type="text" placeholder="Nombre completo" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label form-required" for="recipientId">
+              <i class="fas fa-id-badge"></i>Número de identificación
+            </label>
+            <input id="recipientId" class="form-control" type="text" placeholder="Ej: 1032456789" required />
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label" for="extraInfo">
+              <i class="fas fa-sticky-note"></i>Información adicional (opcional)
+            </label>
+            <textarea id="extraInfo" class="form-control" placeholder="Observaciones o notas adicionales..."></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <div class="actions">
+              <button id="generateBtn" class="btn btn-primary" type="button">
+                <i class="fas fa-qrcode"></i>Generar Código QR
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="qr-section">
+          <div class="qr-container">
+            <div id="qrcode"></div>
+            <div class="qr-info">
+              <div class="meta-info" id="metaInfo">Complete el formulario y haga clic en "Generar Código QR"</div>
+              <div class="actions">
+                <button id="downloadBtn" class="btn btn-secondary" type="button" disabled>
+                  <i class="fas fa-download"></i>Descargar PNG
+                </button>
+                <button id="copyImageBtn" class="btn btn-accent" type="button" disabled>
+                  <i class="fas fa-copy"></i>Copiar imagen
+                </button>
+                <button id="copyRadicadoBtn" class="btn btn-secondary" type="button" disabled>
+                  <i class="fas fa-clipboard"></i>Copiar Radicado
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>Consejo Comunitario de Tierra Bomba &copy; <span id="currentYear"></span> - Todos los derechos reservados</p>
+  </footer>
+
+  <!-- Librería QR -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <script>
+    // Actualizar año actual en el footer
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    const qrcodeContainer = document.getElementById('qrcode');
+    const metaInfo = document.getElementById('metaInfo');
+    const generateBtn = document.getElementById('generateBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const copyImageBtn = document.getElementById('copyImageBtn');
+    const copyRadicadoBtn = document.getElementById('copyRadicadoBtn');
+
+    let qrcodeObj = null;
+    let currentRadicado = '';
+
+    function makeRadicado(name, id) {
+      const letras = (name.replace(/\s+/g, '').toUpperCase().slice(0, 4) || 'AA');
+      const randomLetras = letras[Math.floor(Math.random() * letras.length)] + letras[Math.floor(Math.random() * letras.length)];
+      const idNums = id.replace(/\D/g, '');
+      const randomNums = idNums.slice(-3) || Math.floor(100 + Math.random() * 900);
+      return `CTB-${randomLetras}${randomNums}`;
+    }
+
+    generateBtn.addEventListener('click', () => {
+      const docType = document.getElementById('docType').value.trim();
+      const idType = document.getElementById('idType').value;
+      const recipientName = document.getElementById('recipientName').value.trim();
+      const recipientId = document.getElementById('recipientId').value.trim();
+      const extraInfo = document.getElementById('extraInfo').value.trim();
+
+      if (!docType || !recipientName || !recipientId || !idType) {
+        alert('Por favor completa todos los campos obligatorios.');
+        return;
+      }
+
+      currentRadicado = makeRadicado(recipientName, recipientId);
+
+      const payload = {
+        docType,
+        idType,
+        recipientName,
+        recipientId,
+        extraInfo,
+        radicado: currentRadicado,
+        fecha: new Date().toLocaleString()
+      };
+
+      // URL del desencriptador
+      const baseURL = "Desencriptador.html";
+      const fullURL = `${baseURL}?data=${encodeURIComponent(JSON.stringify(payload))}`;
+
+      qrcodeContainer.innerHTML = '';
+      qrcodeObj = new QRCode(qrcodeContainer, {
+        text: fullURL,
+        width: 220,
+        height: 220,
+        correctLevel: QRCode.CorrectLevel.M
+      });
+
+      metaInfo.innerHTML = `Radicado generado: <strong>${currentRadicado}</strong><br>El QR dirige automáticamente al desencriptador.`;
+      downloadBtn.disabled = false;
+      copyImageBtn.disabled = false;
+      copyRadicadoBtn.disabled = false;
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const img = qrcodeContainer.querySelector('img');
+      if (img) {
+        const a = document.createElement('a');
+        a.href = img.src;
+        a.download = `${currentRadicado}.png`;
+        a.click();
+      }
+    });
+
+    copyImageBtn.addEventListener('click', async () => {
+      const img = qrcodeContainer.querySelector('img');
+      if (img) {
+        const res = await fetch(img.src);
+        const blob = await res.blob();
+        await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
+        alert('Imagen QR copiada. Puedes pegarla en Word o donde desees.');
+      }
+    });
+
+    copyRadicadoBtn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(currentRadicado);
+      alert(`Radicado ${currentRadicado} copiado al portapapeles.`);
+    });
+  </script>
+</body>
+</html>

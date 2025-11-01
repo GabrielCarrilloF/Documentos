@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Desencriptador de Certificados - Consejo Comunitario Tierra Bomba</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #0F4C81;      /* Azul marino principal */
+      --secondary: #FF6B35;    /* Naranja vibrante */
+      --accent: #00A896;       /* Verde azulado elegante */
+      --light: #F8F9FA;
+      --dark: #1A1A2E;
+      --gray: #6C757D;
+      --light-bg: #f5f7fb;
+      --gradient-primary: linear-gradient(135deg, var(--primary) 0%, #1A6FC4 100%);
+      --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, #FF8E53 100%);
+      --gradient-accent: linear-gradient(135deg, var(--accent) 0%, #02C39A 100%);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.12);
+      --radius: 16px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+
+    .header {
+      background: var(--gradient-primary);
+      color: white;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 4px 20px rgba(15, 76, 129, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+      opacity: 0.1;
+    }
+
+    .header-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-container {
+      width: 70px;
+      height: 70px;
+      background: white;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .logo {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gradient-accent);
+      color: white;
+      font-weight: bold;
+      font-size: 10px;
+      text-align: center;
+      line-height: 1.2;
+      padding: 5px;
+    }
+
+    .org-info h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.5px;
+    }
+
+    .org-info p {
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 900px;
+      background: white;
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    .card-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .card-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .card-subtitle {
+      color: var(--gray);
+      font-size: 1rem;
+    }
+
+    .info-section {
+      margin: 2rem 0;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-title i {
+      color: var(--accent);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      transition: var(--transition);
+      min-height: 120px;
+    }
+
+    .info-item:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .info-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .info-label i {
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .info-value {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--dark);
+      word-break: break-word;
+      line-height: 1.5;
+      padding: 0.5rem 0;
+    }
+
+    .empty-value {
+      color: var(--gray);
+      font-style: italic;
+    }
+
+    .highlight-item {
+      background: linear-gradient(135deg, #e6f7ff 0%, #f0f9ff 100%);
+      border-left: 4px solid var(--accent);
+    }
+
+    .alert {
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 4px solid #ef4444;
+      color: var(--dark);
+    }
+
+    .alert-success {
+      background: rgba(0, 168, 150, 0.1);
+      border-left: 4px solid var(--accent);
+      color: var(--dark);
+    }
+
+    .alert i {
+      font-size: 1.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .alert-error i {
+      color: #ef4444;
+    }
+
+    .alert-success i {
+      color: var(--accent);
+    }
+
+    .alert-content h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      gap: 0.7rem;
+      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: var(--gradient-secondary);
+      color: white;
+      box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(255, 107, 53, 0.5);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--gray);
+      font-size: 0.9rem;
+      background: white;
+      border-top: 1px solid #e2e8f0;
+      margin-top: auto;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+      
+      .card {
+        padding: 1.5rem;
+      }
+      
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .info-item {
+        min-height: auto;
+      }
+    }
+
+    /* Animaciones */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    .info-item {
+      animation: fadeIn 0.6s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .info-item:nth-child(1) { animation-delay: 0.1s; }
+    .info-item:nth-child(2) { animation-delay: 0.2s; }
+    .info-item:nth-child(3) { animation-delay: 0.3s; }
+    .info-item:nth-child(4) { animation-delay: 0.4s; }
+    .info-item:nth-child(5) { animation-delay: 0.5s; }
+    .info-item:nth-child(6) { animation-delay: 0.6s; }
+    .info-item:nth-child(7) { animation-delay: 0.7s; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo-container">
+        <div class="logo">CONSEJO<br>COMUNITARIO<br>TIERRA BOMBA</div>
+      </div>
+      <div class="org-info">
+        <h1>Consejo Comunitario de Tierra Bomba</h1>
+        <p>Desencriptador de Certificados Oficiales</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Desencriptador de Certificados</h2>
+        <p class="card-subtitle">Información recuperada del código QR escaneado</p>
+      </div>
+
+      <div id="output"></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>Consejo Comunitario de Tierra Bomba &copy; <span id="currentYear"></span> - Todos los derechos reservados</p>
+  </footer>
+
+  <script>
+    // Actualizar año actual en el footer
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    // Obtener un parámetro de la URL
+    function getParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    const output = document.getElementById("output");
+    let dataParam = getParam("data");
+
+    if (!dataParam) {
+      output.innerHTML = `
+        <div class="alert alert-error">
+          <i class="fas fa-exclamation-triangle"></i>
+          <div class="alert-content">
+            <h3>No se encontró información para desencriptar</h3>
+            <p>Verifique que el enlace o código QR sea válido.</p>
+          </div>
+        </div>
+      `;
+    } else {
+      try {
+        // Limpieza de posibles caracteres extraños en el parámetro
+        dataParam = dataParam.trim();
+        dataParam = dataParam.replace(/^\?/, ''); // elimina "?" inicial si existe
+        dataParam = dataParam.replace(/\s+/g, ''); // elimina espacios
+
+        // Intentar decodificar la cadena URL
+        const decodedString = decodeURIComponent(dataParam);
+
+        // Convertir a objeto JSON
+        const decoded = JSON.parse(decodedString);
+
+        // Mostrar la información decodificada
+        output.innerHTML = `
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <div class="alert-content">
+              <h3>Información recuperada correctamente</h3>
+              <p>Los datos del certificado han sido desencriptados y validados.</p>
+            </div>
+          </div>
+
+          <div class="info-section">
+            <h3 class="section-title">
+              <i class="fas fa-id-card"></i>Información Personal
+            </h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <div class="info-label">
+                  <i class="fas fa-user"></i>Nombre Completo
+                </div>
+                <div class="info-value">${decoded.recipientName || '<span class="empty-value">No especificado</span>'}</div>
+              </div>
+
+              <div class="info-item">
+                <div class="info-label">
+                  <i class="fas fa-id-badge"></i>Número de Identificación
+                </div>
+                <div class="info-value">${decoded.recipientId || '<span class="empty-value">No especificado</span>'}</div>
+              </div>
+
+              <div class="info-item">
+                <div class="info-label">
+                  <i class="fas fa-address-card"></i>Tipo de Identificación
+                </div>
+                <div class="info-value">${decoded.idType || '<span class="empty-value">No especificado</span>'}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-section">
+            <h3 class="section-title">
+              <i class="fas fa-file-contract"></i>Detalles del Documento
+            </h3>
+            <div class="info-grid">
+              <div class="info-item highlight-item">
+                <div class="info-label">
+                  <i class="fas fa-file-alt"></i>Tipo de Documento
+                </div>
+                <div class="info-value">${decoded.docType || '<span class="empty-value">No especificado</span>'}</div>
+              </div>
+
+              <div class="info-item highlight-item">
+                <div class="info-label">
+                  <i class="fas fa-hashtag"></i>Número de Radicado
+                </div>
+                <div class="info-value">${decoded.radicado || '<span class="empty-value">No asignado</span>'}</div>
+              </div>
+
+              <div class="info-item">
+                <div class="info-label">
+                  <i class="fas fa-calendar-alt"></i>Fecha de Generación
+                </div>
+                <div class="info-value">${decoded.fecha || '<span class="empty-value">Sin fecha</span>'}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-section">
+            <h3 class="section-title">
+              <i class="fas fa-sticky-note"></i>Información Adicional
+            </h3>
+            <div class="info-grid">
+              <div class="info-item" style="grid-column: 1 / -1; min-height: auto;">
+                <div class="info-label">
+                  <i class="fas fa-comment-alt"></i>Observaciones
+                </div>
+                <div class="info-value">${decoded.extraInfo || '<span class="empty-value">Sin observaciones adicionales</span>'}</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align: center; border-top: 1px solid #e2e8f0; padding-top: 2rem;">
+            <button class="btn btn-primary" onclick="window.print()">
+              <i class="fas fa-print"></i>Imprimir o Guardar como PDF
+            </button>
+          </div>
+        `;
+      } catch (error) {
+        console.error('Error al decodificar:', error);
+        output.innerHTML = `
+          <div class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <div class="alert-content">
+              <h3>Error al procesar la información</h3>
+              <p>Verifique que el enlace o código QR sea válido y esté completo.</p>
+              <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--gray);">Detalles técnicos: ${error.message}</p>
+            </div>
+          </div>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
