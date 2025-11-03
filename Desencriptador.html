@@ -80,21 +80,16 @@
       justify-content: center;
       box-shadow: var(--shadow);
       overflow: hidden;
+      padding: 5px;
     }
 
     .logo {
       width: 100%;
       height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--gradient-accent);
-      color: white;
-      font-weight: bold;
-      font-size: 10px;
-      text-align: center;
-      line-height: 1.2;
-      padding: 5px;
+      background-image: url('https://github.com/GabrielCarrilloF/Documentos/blob/main/logo%20tirra.png?raw=true');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
 
     .org-info h1 {
@@ -132,6 +127,7 @@
       margin-bottom: 2rem;
       padding-bottom: 1.5rem;
       border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      text-align: center;
     }
 
     .card-title {
@@ -215,6 +211,11 @@
       word-break: break-word;
       line-height: 1.5;
       padding: 0.5rem 0;
+      background: white;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      margin-top: 0.5rem;
     }
 
     .empty-value {
@@ -228,42 +229,70 @@
     }
 
     .alert {
-      padding: 1.5rem;
+      padding: 2rem;
       border-radius: 12px;
       margin-bottom: 2rem;
       display: flex;
-      align-items: flex-start;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
       gap: 1rem;
     }
 
     .alert-error {
       background: rgba(239, 68, 68, 0.1);
-      border-left: 4px solid #ef4444;
+      border: 2px solid #ef4444;
       color: var(--dark);
     }
 
     .alert-success {
       background: rgba(0, 168, 150, 0.1);
-      border-left: 4px solid var(--accent);
+      border: 2px solid var(--accent);
       color: var(--dark);
     }
 
-    .alert i {
-      font-size: 1.5rem;
-      margin-top: 0.25rem;
+    .alert-warning {
+      background: rgba(255, 193, 7, 0.1);
+      border: 2px solid #ffc107;
+      color: var(--dark);
     }
 
-    .alert-error i {
+    .alert-info {
+      background: rgba(13, 110, 253, 0.1);
+      border: 2px solid #0d6efd;
+      color: var(--dark);
+    }
+
+    .alert-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .alert-error .alert-icon {
       color: #ef4444;
     }
 
-    .alert-success i {
+    .alert-success .alert-icon {
       color: var(--accent);
+    }
+
+    .alert-warning .alert-icon {
+      color: #ffc107;
+    }
+
+    .alert-info .alert-icon {
+      color: #0d6efd;
     }
 
     .alert-content h3 {
       margin-bottom: 0.5rem;
-      font-size: 1.2rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .alert-content p {
+      font-size: 1.1rem;
+      line-height: 1.6;
     }
 
     .btn {
@@ -309,6 +338,19 @@
       box-shadow: 0 7px 20px rgba(255, 107, 53, 0.5);
     }
 
+    .btn-secondary {
+      background: white;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(15, 76, 129, 0.3);
+    }
+
     .footer {
       text-align: center;
       padding: 1.5rem;
@@ -317,6 +359,63 @@
       background: white;
       border-top: 1px solid #e2e8f0;
       margin-top: auto;
+    }
+
+    .validation-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--gradient-accent);
+      color: white;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .document-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .document-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .document-subtitle {
+      color: var(--gray);
+      font-size: 1.1rem;
+    }
+
+    .instructions {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+      border-left: 4px solid var(--accent);
+    }
+
+    .instructions h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .instructions ol {
+      padding-left: 1.5rem;
+    }
+
+    .instructions li {
+      margin-bottom: 0.75rem;
+      line-height: 1.6;
     }
 
     @media (max-width: 768px) {
@@ -342,6 +441,14 @@
       .info-item {
         min-height: auto;
       }
+
+      .alert {
+        padding: 1.5rem;
+      }
+
+      .alert-icon {
+        font-size: 2.5rem;
+      }
     }
 
     /* Animaciones */
@@ -366,13 +473,23 @@
     .info-item:nth-child(5) { animation-delay: 0.5s; }
     .info-item:nth-child(6) { animation-delay: 0.6s; }
     .info-item:nth-child(7) { animation-delay: 0.7s; }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+      20%, 40%, 60%, 80% { transform: translateX(10px); }
+    }
+
+    .shake {
+      animation: shake 0.8s ease-in-out;
+    }
   </style>
 </head>
 <body>
   <header class="header">
     <div class="header-content">
       <div class="logo-container">
-        <div class="logo">CONSEJO<br>COMUNITARIO<br>TIERRA BOMBA</div>
+        <div class="logo"></div>
       </div>
       <div class="org-info">
         <h1>Consejo Comunitario de Tierra Bomba</h1>
@@ -406,131 +523,262 @@
       return urlParams.get(name);
     }
 
-    const output = document.getElementById("output");
-    let dataParam = getParam("data");
+    // Limpiar la URL y redirigir a estado "Expirado"
+    function cleanURLAndExpire() {
+      const newURL = window.location.origin + window.location.pathname + '?estado=Expirado';
+      window.history.replaceState({}, document.title, newURL);
+    }
 
-    if (!dataParam) {
+    // Validar datos del certificado
+    function validateCertificateData(data) {
+      const errors = [];
+      
+      // Validar campos obligatorios
+      if (!data.recipientName || data.recipientName.trim() === '') {
+        errors.push('El nombre del destinatario es obligatorio');
+      }
+      
+      if (!data.recipientId || data.recipientId.trim() === '') {
+        errors.push('El número de identificación es obligatorio');
+      }
+      
+      if (!data.idType || data.idType.trim() === '') {
+        errors.push('El tipo de identificación es obligatorio');
+      }
+      
+      if (!data.docType || data.docType.trim() === '') {
+        errors.push('El tipo de documento es obligatorio');
+      }
+      
+      if (!data.radicado || data.radicado.trim() === '') {
+        errors.push('El número de radicado es obligatorio');
+      }
+      
+      // Validar formato del radicado
+      if (data.radicado && !/^CTB-[A-Z]{2}\d{3}$/.test(data.radicado)) {
+        errors.push('El formato del radicado no es válido');
+      }
+      
+      return errors;
+    }
+
+    const output = document.getElementById("output");
+    const estadoParam = getParam("estado");
+    const dataParam = getParam("data");
+
+    // Manejar estado "Expirado"
+    if (estadoParam === 'Expirado') {
       output.innerHTML = `
-        <div class="alert alert-error">
-          <i class="fas fa-exclamation-triangle"></i>
+        <div class="alert alert-warning">
+          <i class="fas fa-clock alert-icon"></i>
           <div class="alert-content">
-            <h3>No se encontró información para desencriptar</h3>
-            <p>Verifique que el enlace o código QR sea válido.</p>
+            <h3>INFORMACIÓN EXPIRADA</h3>
+            <p>La sesión de visualización ha caducado por motivos de seguridad.</p>
+            <p>Para proteger la privacidad de la información, los datos se muestran una sola vez.</p>
           </div>
         </div>
+
+        <div class="instructions">
+          <h3><i class="fas fa-qrcode"></i>Instrucciones para ver la información</h3>
+          <ol>
+            <li><strong>Escanee el código QR nuevamente</strong> desde el documento original</li>
+            <li>Asegúrese de que el código QR esté completo y legible</li>
+            <li>Verifique que el documento sea auténtico del Consejo Comunitario de Tierra Bomba</li>
+            <li>Si el problema persiste, contacte al emisor del documento</li>
+          </ol>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+          <button class="btn btn-primary" onclick="location.reload()">
+            <i class="fas fa-sync-alt"></i>Reintentar
+          </button>
+        </div>
       `;
-    } else {
+    } 
+    // Manejar datos del QR
+    else if (dataParam) {
       try {
         // Limpieza de posibles caracteres extraños en el parámetro
-        dataParam = dataParam.trim();
-        dataParam = dataParam.replace(/^\?/, ''); // elimina "?" inicial si existe
-        dataParam = dataParam.replace(/\s+/g, ''); // elimina espacios
+        let cleanDataParam = dataParam.trim();
+        cleanDataParam = cleanDataParam.replace(/^\?/, ''); // elimina "?" inicial si existe
+        cleanDataParam = cleanDataParam.replace(/\s+/g, ''); // elimina espacios
 
         // Intentar decodificar la cadena URL
-        const decodedString = decodeURIComponent(dataParam);
+        const decodedString = decodeURIComponent(cleanDataParam);
 
         // Convertir a objeto JSON
         const decoded = JSON.parse(decodedString);
 
-        // Mostrar la información decodificada
-        output.innerHTML = `
-          <div class="alert alert-success">
-            <i class="fas fa-check-circle"></i>
-            <div class="alert-content">
-              <h3>Información recuperada correctamente</h3>
-              <p>Los datos del certificado han sido desencriptados y validados.</p>
-            </div>
-          </div>
-
-          <div class="info-section">
-            <h3 class="section-title">
-              <i class="fas fa-id-card"></i>Información Personal
-            </h3>
-            <div class="info-grid">
-              <div class="info-item">
-                <div class="info-label">
-                  <i class="fas fa-user"></i>Nombre Completo
-                </div>
-                <div class="info-value">${decoded.recipientName || '<span class="empty-value">No especificado</span>'}</div>
-              </div>
-
-              <div class="info-item">
-                <div class="info-label">
-                  <i class="fas fa-id-badge"></i>Número de Identificación
-                </div>
-                <div class="info-value">${decoded.recipientId || '<span class="empty-value">No especificado</span>'}</div>
-              </div>
-
-              <div class="info-item">
-                <div class="info-label">
-                  <i class="fas fa-address-card"></i>Tipo de Identificación
-                </div>
-                <div class="info-value">${decoded.idType || '<span class="empty-value">No especificado</span>'}</div>
+        // Validar los datos
+        const validationErrors = validateCertificateData(decoded);
+        
+        if (validationErrors.length > 0) {
+          output.innerHTML = `
+            <div class="alert alert-error shake">
+              <i class="fas fa-exclamation-triangle alert-icon"></i>
+              <div class="alert-content">
+                <h3>CERTIFICADO NO VÁLIDO</h3>
+                <p>Se detectaron problemas con la información del certificado:</p>
+                <ul style="text-align: left; margin: 1rem 0; padding-left: 1.5rem;">
+                  ${validationErrors.map(error => `<li>${error}</li>`).join('')}
+                </ul>
+                <p style="font-weight: 600;">Este certificado podría estar alterado o falsificado.</p>
               </div>
             </div>
-          </div>
-
-          <div class="info-section">
-            <h3 class="section-title">
-              <i class="fas fa-file-contract"></i>Detalles del Documento
-            </h3>
-            <div class="info-grid">
-              <div class="info-item highlight-item">
-                <div class="info-label">
-                  <i class="fas fa-file-alt"></i>Tipo de Documento
+          `;
+          
+          // Limpiar URL después de mostrar error
+          setTimeout(cleanURLAndExpire, 100);
+        } else {
+          // Mostrar la información decodificada
+          output.innerHTML = `
+            <div class="alert alert-success">
+              <i class="fas fa-check-circle alert-icon"></i>
+              <div class="alert-content">
+                <h3>CERTIFICADO VÁLIDO</h3>
+                <p>Los datos del certificado han sido verificados y validados correctamente.</p>
+                <div class="validation-badge">
+                  <i class="fas fa-shield-check"></i>
+                  Documento Autenticado
                 </div>
-                <div class="info-value">${decoded.docType || '<span class="empty-value">No especificado</span>'}</div>
-              </div>
-
-              <div class="info-item highlight-item">
-                <div class="info-label">
-                  <i class="fas fa-hashtag"></i>Número de Radicado
-                </div>
-                <div class="info-value">${decoded.radicado || '<span class="empty-value">No asignado</span>'}</div>
-              </div>
-
-              <div class="info-item">
-                <div class="info-label">
-                  <i class="fas fa-calendar-alt"></i>Fecha de Generación
-                </div>
-                <div class="info-value">${decoded.fecha || '<span class="empty-value">Sin fecha</span>'}</div>
               </div>
             </div>
-          </div>
 
-          <div class="info-section">
-            <h3 class="section-title">
-              <i class="fas fa-sticky-note"></i>Información Adicional
-            </h3>
-            <div class="info-grid">
-              <div class="info-item" style="grid-column: 1 / -1; min-height: auto;">
-                <div class="info-label">
-                  <i class="fas fa-comment-alt"></i>Observaciones
+            <div class="document-header">
+              <h1 class="document-title">${decoded.docType || 'Documento Oficial'}</h1>
+              <p class="document-subtitle">Consejo Comunitario de Tierra Bomba</p>
+            </div>
+
+            <div class="info-section">
+              <h3 class="section-title">
+                <i class="fas fa-id-card"></i>Información Personal
+              </h3>
+              <div class="info-grid">
+                <div class="info-item">
+                  <div class="info-label">
+                    <i class="fas fa-user"></i>Nombre Completo
+                  </div>
+                  <div class="info-value">${decoded.recipientName}</div>
                 </div>
-                <div class="info-value">${decoded.extraInfo || '<span class="empty-value">Sin observaciones adicionales</span>'}</div>
+
+                <div class="info-item">
+                  <div class="info-label">
+                    <i class="fas fa-id-badge"></i>Número de Identificación
+                  </div>
+                  <div class="info-value">${decoded.recipientId}</div>
+                </div>
+
+                <div class="info-item">
+                  <div class="info-label">
+                    <i class="fas fa-address-card"></i>Tipo de Identificación
+                  </div>
+                  <div class="info-value">${decoded.idType}</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div style="text-align: center; border-top: 1px solid #e2e8f0; padding-top: 2rem;">
-            <button class="btn btn-primary" onclick="window.print()">
-              <i class="fas fa-print"></i>Imprimir o Guardar como PDF
-            </button>
-          </div>
-        `;
+            <div class="info-section">
+              <h3 class="section-title">
+                <i class="fas fa-file-contract"></i>Detalles del Documento
+              </h3>
+              <div class="info-grid">
+                <div class="info-item highlight-item">
+                  <div class="info-label">
+                    <i class="fas fa-file-alt"></i>Tipo de Documento
+                  </div>
+                  <div class="info-value">${decoded.docType}</div>
+                </div>
+
+                <div class="info-item highlight-item">
+                  <div class="info-label">
+                    <i class="fas fa-hashtag"></i>Número de Radicado
+                  </div>
+                  <div class="info-value">${decoded.radicado}</div>
+                </div>
+
+                <div class="info-item">
+                  <div class="info-label">
+                    <i class="fas fa-calendar-alt"></i>Fecha de Generación
+                  </div>
+                  <div class="info-value">${decoded.fecha || '<span class="empty-value">Sin fecha</span>'}</div>
+                </div>
+              </div>
+            </div>
+
+            ${decoded.extraInfo ? `
+            <div class="info-section">
+              <h3 class="section-title">
+                <i class="fas fa-sticky-note"></i>Información Adicional
+              </h3>
+              <div class="info-grid">
+                <div class="info-item" style="grid-column: 1 / -1; min-height: auto;">
+                  <div class="info-label">
+                    <i class="fas fa-comment-alt"></i>Observaciones
+                  </div>
+                  <div class="info-value">${decoded.extraInfo}</div>
+                </div>
+              </div>
+            </div>
+            ` : ''}
+
+            <div class="alert alert-info">
+              <i class="fas fa-info-circle alert-icon"></i>
+              <div class="alert-content">
+                <h3>INFORMACIÓN DE SEGURIDAD</h3>
+                <p>Por motivos de seguridad, esta información solo se mostrará una vez.</p>
+                <p>Si actualiza la página, deberá escanear el código QR nuevamente.</p>
+              </div>
+            </div>
+
+            <div style="text-align: center; border-top: 1px solid #e2e8f0; padding-top: 2rem;">
+              <button class="btn btn-primary" onclick="window.print()">
+                <i class="fas fa-print"></i>Imprimir o Guardar como PDF
+              </button>
+            </div>
+          `;
+
+          // Limpiar la URL después de mostrar la información
+          setTimeout(cleanURLAndExpire, 100);
+        }
       } catch (error) {
         console.error('Error al decodificar:', error);
         output.innerHTML = `
-          <div class="alert alert-error">
-            <i class="fas fa-exclamation-circle"></i>
+          <div class="alert alert-error shake">
+            <i class="fas fa-exclamation-circle alert-icon"></i>
             <div class="alert-content">
-              <h3>Error al procesar la información</h3>
-              <p>Verifique que el enlace o código QR sea válido y esté completo.</p>
+              <h3>ERROR CRÍTICO</h3>
+              <p>No se pudo procesar la información del código QR.</p>
+              <p style="margin-top: 1rem; font-weight: 600;">Este código QR está dañado, alterado o no es compatible con el sistema.</p>
               <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--gray);">Detalles técnicos: ${error.message}</p>
             </div>
           </div>
         `;
+        
+        // Limpiar URL después de mostrar error
+        setTimeout(cleanURLAndExpire, 100);
       }
+    } 
+    // Sin parámetros - estado inicial
+    else {
+      output.innerHTML = `
+        <div class="alert alert-info">
+          <i class="fas fa-qrcode alert-icon"></i>
+          <div class="alert-content">
+            <h3>ESPERANDO CÓDIGO QR</h3>
+            <p>Utilice un lector de códigos QR para escanear un certificado oficial del Consejo Comunitario de Tierra Bomba.</p>
+          </div>
+        </div>
+
+        <div class="instructions">
+          <h3><i class="fas fa-info-circle"></i>Instrucciones de uso</h3>
+          <ol>
+            <li><strong>Escanee el código QR</strong> desde el documento oficial</li>
+            <li>La información se mostrará automáticamente</li>
+            <li>Por seguridad, los datos solo se muestran una vez</li>
+            <li>Puede imprimir o guardar como PDF si lo necesita</li>
+          </ol>
+        </div>
+      `;
     }
   </script>
 </body>
