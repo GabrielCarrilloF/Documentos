@@ -78,21 +78,16 @@
       justify-content: center;
       box-shadow: var(--shadow);
       overflow: hidden;
+      padding: 5px;
     }
 
     .logo {
       width: 100%;
       height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--gradient-accent);
-      color: white;
-      font-weight: bold;
-      font-size: 12px;
-      text-align: center;
-      line-height: 1.2;
-      padding: 5px;
+      background-image: url('https://github.com/GabrielCarrilloF/Documentos/blob/main/logo%20tirra.png?raw=true');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
 
     .org-info h1 {
@@ -296,9 +291,11 @@
       flex-wrap: wrap;
       gap: 2.5rem;
       align-items: flex-start;
+      justify-content: center;
     }
 
-    #qrcode {
+    .qr-wrapper {
+      position: relative;
       padding: 1.5rem;
       background: white;
       border-radius: 16px;
@@ -306,11 +303,66 @@
       box-shadow: var(--shadow);
       display: inline-block;
       transition: var(--transition);
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
-    #qrcode:hover {
+    .qr-wrapper:hover {
       transform: translateY(-5px);
       box-shadow: var(--shadow-hover);
+    }
+
+    #qrcode {
+      position: relative;
+      z-index: 1;
+      width: 180px;
+      height: 180px;
+      margin-bottom: 15px;
+    }
+
+    .qr-logo-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      padding: 3px;
+    }
+
+    .qr-logo-overlay img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .qr-info-text {
+      text-align: center;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .qr-radicado {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .qr-organization {
+      font-size: 0.9rem;
+      color: var(--gray);
     }
 
     .qr-info {
@@ -422,7 +474,7 @@
   <header class="header">
     <div class="header-content">
       <div class="logo-container">
-        <div class="logo">CONSEJO<br>COMUNITARIO<br>TIERRA BOMBA</div>
+        <div class="logo"></div>
       </div>
       <div class="org-info">
         <h1>Consejo Comunitario de Tierra Bomba</h1>
@@ -505,7 +557,16 @@
 
         <div class="qr-section">
           <div class="qr-container">
-            <div id="qrcode"></div>
+            <div class="qr-wrapper" id="qrWrapper">
+              <div id="qrcode"></div>
+              <div class="qr-logo-overlay">
+                <img src="https://github.com/GabrielCarrilloF/Documentos/blob/main/logo%20tirra.png?raw=true" alt="Logo" id="qrLogo">
+              </div>
+              <div class="qr-info-text">
+                <div class="qr-radicado" id="qrRadicadoText"></div>
+                <div class="qr-organization">Consejo Comunitario de Tierra Bomba</div>
+              </div>
+            </div>
             <div class="qr-info">
               <div class="meta-info" id="metaInfo">Complete el formulario y haga clic en "Generar Código QR"</div>
               <div class="actions">
@@ -532,6 +593,8 @@
 
   <!-- Librería QR -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- Librería html2canvas para convertir a imagen -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
     // Actualizar año actual en el footer
@@ -543,9 +606,23 @@
     const downloadBtn = document.getElementById('downloadBtn');
     const copyImageBtn = document.getElementById('copyImageBtn');
     const copyRadicadoBtn = document.getElementById('copyRadicadoBtn');
+    const qrLogo = document.getElementById('qrLogo');
+    const qrWrapper = document.getElementById('qrWrapper');
+    const qrRadicadoText = document.getElementById('qrRadicadoText');
 
     let qrcodeObj = null;
     let currentRadicado = '';
+
+    // Precargar el logo
+    qrLogo.onload = function() {
+      console.log('Logo cargado correctamente');
+    };
+    
+    qrLogo.onerror = function() {
+      console.error('Error al cargar el logo');
+      // Si el logo no se carga, mostrar un placeholder
+      qrLogo.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0id2hpdGUiLz4KPHJlY3QgeD0iOCIgeT0iOCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzBGNEI4MSIvPgo8L3N2Zz4K';
+    };
 
     function makeRadicado(name, id) {
       const letras = (name.replace(/\s+/g, '').toUpperCase().slice(0, 4) || 'AA');
@@ -555,7 +632,7 @@
       return `CTB-${randomLetras}${randomNums}`;
     }
 
-    generateBtn.addEventListener('click', () => {
+    function generateQRCode() {
       const docType = document.getElementById('docType').value.trim();
       const idType = document.getElementById('idType').value;
       const recipientName = document.getElementById('recipientName').value.trim();
@@ -586,35 +663,57 @@
       qrcodeContainer.innerHTML = '';
       qrcodeObj = new QRCode(qrcodeContainer, {
         text: fullURL,
-        width: 220,
-        height: 220,
-        correctLevel: QRCode.CorrectLevel.M
+        width: 180,
+        height: 180,
+        correctLevel: QRCode.CorrectLevel.M,
+        colorDark: "#0F4C81",
+        colorLight: "#ffffff"
       });
 
+      // Actualizar el texto del radicado debajo del QR
+      qrRadicadoText.textContent = currentRadicado;
+      
       metaInfo.innerHTML = `Radicado generado: <strong>${currentRadicado}</strong><br>El QR dirige automáticamente al desencriptador.`;
       downloadBtn.disabled = false;
       copyImageBtn.disabled = false;
       copyRadicadoBtn.disabled = false;
-    });
+    }
+
+    generateBtn.addEventListener('click', generateQRCode);
 
     downloadBtn.addEventListener('click', () => {
-      const img = qrcodeContainer.querySelector('img');
-      if (img) {
-        const a = document.createElement('a');
-        a.href = img.src;
-        a.download = `${currentRadicado}.png`;
-        a.click();
-      }
+      // Usar html2canvas para capturar todo el recuadro del QR
+      html2canvas(qrWrapper, {
+        scale: 2, // Mejor calidad
+        backgroundColor: "#ffffff"
+      }).then(canvas => {
+        // Crear enlace de descarga
+        const link = document.createElement('a');
+        link.download = `${currentRadicado}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
     });
 
-    copyImageBtn.addEventListener('click', async () => {
-      const img = qrcodeContainer.querySelector('img');
-      if (img) {
-        const res = await fetch(img.src);
-        const blob = await res.blob();
-        await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
-        alert('Imagen QR copiada. Puedes pegarla en Word o donde desees.');
-      }
+    copyImageBtn.addEventListener('click', () => {
+      // Usar html2canvas para capturar todo el recuadro del QR
+      html2canvas(qrWrapper, {
+        scale: 2, // Mejor calidad
+        backgroundColor: "#ffffff"
+      }).then(canvas => {
+        // Convertir a blob y copiar al portapapeles
+        canvas.toBlob(blob => {
+          const item = new ClipboardItem({ "image/png": blob });
+          navigator.clipboard.write([item])
+            .then(() => {
+              alert('Imagen QR copiada al portapapeles. Puedes pegarla en cualquier aplicación.');
+            })
+            .catch(err => {
+              console.error('Error al copiar la imagen:', err);
+              alert('No se pudo copiar la imagen. Intenta descargarla en su lugar.');
+            });
+        });
+      });
     });
 
     copyRadicadoBtn.addEventListener('click', async () => {
